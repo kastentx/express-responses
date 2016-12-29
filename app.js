@@ -28,8 +28,43 @@ app.use('/users', users);
 app.get('/render', function(req, res) {
   res.render('render')
 })
-
-
+app.get('/render-title', function(req, res) {
+  res.render('index', {title: 'Express.js Guide'})
+})
+app.get('/locals', function(req, res) {
+  res.locals = {title: 'Express.js Guide'}
+  res.render('index')
+})
+app.get('/set-html', function(req, res) {
+  res.set('Content-type', 'text/html')
+  res.end('<html><body>' +
+          '<h1>Express.js Guide</h1>' +
+          '</body></html>')
+})
+app.get('/set-csv', function(req, res) {
+  var body = 'title, tags\n' +
+             'Express.js Guide, node.js express.js\n' +
+    'Rapid Prototyping with JS, backbone.js, node.js, mongodb\n' +
+    'Javascript: The GOOD Parts, javascript\n'
+  res.set({'Content-type': 'text/plain',
+    'Content-Length' : body.length,
+    'Set-Cookie' : ['type=reader', 'language=javascript']})
+  res.end(body)
+})
+app.get('/status', function(req, res) {
+  res.status(200).send('alive')
+})
+app.get('/send-ok', function(req, res) {
+  res.send(200, {message : 'Data was submitted successfully.'})
+})
+app.get('/send-err', function(req, res) {
+  res.send(500, {message : 'Oops, the server is down.'})
+})
+app.get('/json', function(req, res) {
+  res.json(200, [{title: 'Express.js Guide', tags: 'node.js express.js'}, 
+    {title: 'Rapid Prototyping with JS', tags: 'backbone.js, node.js, mongodb'},
+    {title: 'Javascript: The Good Parts', tags: 'javascript'}])
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
